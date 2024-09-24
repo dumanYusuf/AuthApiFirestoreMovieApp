@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27053406959",
+    "project_id": "firestoremovieapp-3385a",
+    "storage_bucket": "firestoremovieapp-3385a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27053406959:android:4009179fe3f7430035791a",
+        "android_client_info": {
+          "package_name": "com.example.firestoremovieapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHE6MaD9scJgyyzQxiGjJWTjBnRnmZuYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
