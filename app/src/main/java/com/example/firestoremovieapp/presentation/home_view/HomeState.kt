@@ -1,7 +1,9 @@
 package com.example.firestoremovieapp.presentation.home_view
 
+import com.example.firestoremovieapp.domain.model.CategoryMoviesModel
+
 data class HomeState(
-    val isSucsess:Boolean=false,
-    val isError:String="",
-    val isLoading:Boolean=false
+    val isLoading:Boolean=false,
+    val categoryMoviesList: List<CategoryMoviesModel> = emptyList(),
+    val errorMessage:String=""
 )
