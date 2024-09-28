@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firestoremovieapp.domain.model.FavoriModel
+import com.example.firestoremovieapp.domain.model.LaterMovies
 import com.example.firestoremovieapp.domain.use_case.category_movies_use_case.CategoryMoviesUseCase
 import com.example.firestoremovieapp.domain.use_case.favori_add_firestore_use_case.FavoriAddFirestoreUseCase
+import com.example.firestoremovieapp.domain.use_case.later_watches_movies_use_case.LaterWatchesAddFirestoreUseCase
 import com.example.firestoremovieapp.domain.use_case.populer_movies_use_case.PopulerMoviesUseCase
 import com.example.firestoremovieapp.presentation.favorites_view.FavoriState
 import com.example.firestoremovieapp.util.Resource
@@ -22,7 +24,8 @@ import javax.inject.Inject
 class HomePageViewModel @Inject constructor(
     private val categoryUseCase: CategoryMoviesUseCase,
     private val populerMoviesUseCase: PopulerMoviesUseCase,
-    private val favoriAddFirestoreUseCase: FavoriAddFirestoreUseCase
+    private val favoriAddFirestoreUseCase: FavoriAddFirestoreUseCase,
+    private val lateuseCase:LaterWatchesAddFirestoreUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeState>(HomeState())
@@ -46,6 +49,13 @@ class HomePageViewModel @Inject constructor(
         viewModelScope.launch {
             favoriAddFirestoreUseCase.addFavori(favoriModel)
             Log.e("succecc","add fovori success")
+        }
+    }
+
+    fun addLaterMovies(laterMovies: LaterMovies){
+        viewModelScope.launch {
+            lateuseCase.addLaterMovies(laterMovies)
+            Log.e("adedd later movies","success adedd later movies")
         }
     }
 

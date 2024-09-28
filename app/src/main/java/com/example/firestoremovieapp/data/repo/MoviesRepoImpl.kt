@@ -5,6 +5,7 @@ import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesDto
 import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesFilterDto
 import com.example.firestoremovieapp.data.remote.dto.PopulerMoviesDto
 import com.example.firestoremovieapp.domain.model.FavoriModel
+import com.example.firestoremovieapp.domain.model.LaterMovies
 import com.example.firestoremovieapp.domain.repo.MoviesRepo
 import com.example.firestoremovieapp.util.Constans
 import com.example.firestoremovieapp.util.Resource
@@ -96,6 +97,28 @@ class MoviesRepoImpl @Inject constructor(
             Resource.Error("Error:${e.message}")
         }
     }
+
+    override suspend fun addWatcherLaterMovies(laterMovies: LaterMovies): Resource<LaterMovies> {
+        return try {
+            val userId = auth.currentUser?.uid
+            if (userId != null) {
+                val documentRef = firestore.collection("Users")
+                    .document(userId)
+                    .collection("LaterWatches")
+                    .add(laterMovies.toMap())
+                    .await()
+                val updatedLaterMovies = laterMovies.copy(laterMoviesId = documentRef.id)
+
+
+                Resource.Success(updatedLaterMovies)
+            } else {
+                Resource.Error("user not found")
+            }
+        } catch (e: Exception) {
+            Resource.Error("Error: ${e.message}")
+        }
+    }
+
 
 
 }

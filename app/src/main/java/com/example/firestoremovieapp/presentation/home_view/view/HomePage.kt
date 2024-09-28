@@ -42,6 +42,7 @@ import coil.compose.rememberImagePainter
 import com.example.firestoremovieapp.R
 import com.example.firestoremovieapp.Screen
 import com.example.firestoremovieapp.domain.model.FavoriModel
+import com.example.firestoremovieapp.domain.model.LaterMovies
 import com.example.firestoremovieapp.presentation.home_view.HomePageViewModel
 import com.example.firestoremovieapp.util.Constans
 import com.google.gson.Gson
@@ -173,15 +174,15 @@ fun HomePage(
                                                 Icon(
                                                    modifier = Modifier.clickable {
                                                        val favoriModel = FavoriModel(
-                                                           favoriId ="",
-                                                           backdrop_path = populerMovie.backdrop_path ?: "",
-                                                           genre_ids = populerMovie.genre_ids ?: listOf(),
+                                                           favoriId =populerMovie.id.toString(),
+                                                           backdrop_path = populerMovie.backdrop_path ,
+                                                           genre_ids = populerMovie.genre_ids ,
                                                            id = populerMovie.id,
                                                            original_language = populerMovie.original_language,
                                                            original_title = populerMovie.original_title,
                                                            overview = populerMovie.overview,
                                                            popularity = populerMovie.popularity,
-                                                           poster_path = populerMovie.poster_path ?: "",
+                                                           poster_path = populerMovie.poster_path ,
                                                            release_date = populerMovie.release_date,
                                                            title = populerMovie.title,
                                                            vote_average = populerMovie.vote_average
@@ -206,10 +207,28 @@ fun HomePage(
                                                 verticalAlignment = Alignment.CenterVertically
                                             ) {
                                                 Icon(
+                                                    modifier = Modifier.clickable {
+                                                        val laterMovie = LaterMovies(
+                                                            laterMoviesId = populerMovie.id.toString(),
+                                                            backdrop_path = populerMovie.backdrop_path ,
+                                                            genre_ids = populerMovie.genre_ids ,
+                                                            id = populerMovie.id,
+                                                            original_language = populerMovie.original_language,
+                                                            original_title = populerMovie.original_title,
+                                                            overview = populerMovie.overview,
+                                                            popularity = populerMovie.popularity,
+                                                            poster_path = populerMovie.poster_path ?: "",
+                                                            release_date = populerMovie.release_date,
+                                                            title = populerMovie.title,
+                                                            vote_average = populerMovie.vote_average
+                                                        )
+                                                        viewModel.addLaterMovies(laterMovie)
+                                                    },
                                                     tint = Color.Red,
                                                     painter = painterResource(id = R.drawable.later),
                                                     contentDescription = ""
                                                 )
+
                                                 Spacer(modifier = Modifier.size(5.dp))
                                                 Text(
                                                     color = Color.White,
@@ -223,17 +242,7 @@ fun HomePage(
                         }
                     }
                 }
-            } else if (statePopuler.errorMessage.isNotBlank()) {
-                Text(
-                    text = statePopuler.errorMessage,
-                    color = Color.Red,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
-
-
     }
 }
