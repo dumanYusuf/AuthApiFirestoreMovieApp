@@ -3,8 +3,11 @@ package com.example.firestoremovieapp.presentation.home_view
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.domain.use_case.category_movies_use_case.CategoryMoviesUseCase
+import com.example.firestoremovieapp.domain.use_case.favori_add_firestore_use_case.FavoriAddFirestoreUseCase
 import com.example.firestoremovieapp.domain.use_case.populer_movies_use_case.PopulerMoviesUseCase
+import com.example.firestoremovieapp.presentation.favorites_view.FavoriState
 import com.example.firestoremovieapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -12,12 +15,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     private val categoryUseCase: CategoryMoviesUseCase,
     private val populerMoviesUseCase: PopulerMoviesUseCase,
+    private val favoriAddFirestoreUseCase: FavoriAddFirestoreUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeState>(HomeState())
@@ -27,15 +32,23 @@ class HomePageViewModel @Inject constructor(
     val statePopuler: StateFlow<HomePopulerState> = _statePopuler
 
 
+
     private var categoryJob: Job? = null
     private var populerJob: Job? = null
-    private var topRatedJob: Job? = null
-    private var upComingJob: Job? = null
+
 
     init {
        getCategoryMovies()
         getPopulerMovies()
     }
+
+    fun addFavori(favoriModel: FavoriModel){
+        viewModelScope.launch {
+            favoriAddFirestoreUseCase.addFavori(favoriModel)
+            Log.e("succecc","add fovori success")
+        }
+    }
+
 
     fun getCategoryMovies() {
         Log.e("start", "viewModelStart")
@@ -78,4 +91,8 @@ class HomePageViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+
+
+
 }

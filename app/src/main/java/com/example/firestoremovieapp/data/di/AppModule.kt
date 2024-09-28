@@ -46,8 +46,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesMoviesRepo(api: MoviesApi): MoviesRepo {
-        return MoviesRepoImpl(api)
+    fun providesMoviesRepo(api: MoviesApi,auth: FirebaseAuth,firestore: FirebaseFirestore): MoviesRepo {
+        return MoviesRepoImpl(api,auth,firestore)
     }
 
 }

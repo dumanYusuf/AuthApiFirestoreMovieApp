@@ -41,6 +41,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.firestoremovieapp.R
 import com.example.firestoremovieapp.Screen
+import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.presentation.home_view.HomePageViewModel
 import com.example.firestoremovieapp.util.Constans
 import com.google.gson.Gson
@@ -170,6 +171,23 @@ fun HomePage(
                                             }
                                             Row {
                                                 Icon(
+                                                   modifier = Modifier.clickable {
+                                                       val favoriModel = FavoriModel(
+                                                           favoriId ="",
+                                                           backdrop_path = populerMovie.backdrop_path ?: "",
+                                                           genre_ids = populerMovie.genre_ids ?: listOf(),
+                                                           id = populerMovie.id,
+                                                           original_language = populerMovie.original_language,
+                                                           original_title = populerMovie.original_title,
+                                                           overview = populerMovie.overview,
+                                                           popularity = populerMovie.popularity,
+                                                           poster_path = populerMovie.poster_path ?: "",
+                                                           release_date = populerMovie.release_date,
+                                                           title = populerMovie.title,
+                                                           vote_average = populerMovie.vote_average
+                                                       )
+                                                       viewModel.addFavori(favoriModel = favoriModel)
+                                                   },
                                                     tint = Color.Red,
                                                     painter = painterResource(id = R.drawable.favori),
                                                     contentDescription = ""
