@@ -1,6 +1,7 @@
 package com.example.firestoremovieapp.presentation.home_view.view
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +23,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
@@ -56,6 +60,9 @@ fun HomePage(
 ) {
     val state = viewModel.state.collectAsState().value
     val statePopuler = viewModel.statePopuler.collectAsState().value
+
+    val isSearcingStart= remember { mutableStateOf(false) }
+    val tf=remember { mutableStateOf("") }
 
 
     Column(modifier.fillMaxSize()) {
@@ -142,10 +149,10 @@ fun HomePage(
                                             .size(250.dp)
                                             .clickable {
                                                 // go to detail movies
-                                                 val movieObject = Gson().toJson(populerMovie)
+                                                val movieObject = Gson().toJson(populerMovie)
                                                 val encodedMovieObject =
                                                     URLEncoder.encode(movieObject, "UTF-8")
-                                               navController.navigate(Screen.DetailPage.route+"/$encodedMovieObject")
+                                                navController.navigate(Screen.DetailPage.route + "/$encodedMovieObject")
                                             },
                                         painter = rememberAsyncImagePainter(model = imageUrl),
                                         contentDescription = "Movie Backdrop",

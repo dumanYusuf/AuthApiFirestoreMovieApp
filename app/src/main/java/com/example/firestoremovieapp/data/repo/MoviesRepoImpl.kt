@@ -1,16 +1,19 @@
 package com.example.firestoremovieapp.data.repo
 
+import UserModel
 import com.example.firestoremovieapp.data.remote.MoviesApi
 import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesDto
 import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesFilterDto
 import com.example.firestoremovieapp.data.remote.dto.PopulerMoviesDto
 import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.domain.model.LaterMovies
+import com.example.firestoremovieapp.domain.model.PopulerMoviesModel
 import com.example.firestoremovieapp.domain.repo.MoviesRepo
 import com.example.firestoremovieapp.util.Constans
 import com.example.firestoremovieapp.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -157,6 +160,26 @@ class MoviesRepoImpl @Inject constructor(
             Resource.Error("Error:${e.message}")
         }
     }
+
+    override suspend fun getUser(): Resource<List<UserModel>> {
+        return try {
+            val userId = auth.currentUser?.uid
+            if (userId != null) {
+                val userDocumentRef = firestore.collection("Users").document(userId).get().await()
+                val user = userDocumentRef.toObject(UserModel::class.java)
+                if (user != null) {
+                    Resource.Success(listOf(user))
+                } else {
+                    Resource.Error("User not found")
+                }
+            } else {
+                Resource.Error("User not found")
+            }
+        } catch (e: Exception) {
+            Resource.Error("Error: ${e.localizedMessage}")
+        }
+    }
+
 
 
 }

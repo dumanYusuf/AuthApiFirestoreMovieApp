@@ -1,10 +1,12 @@
 package com.example.firestoremovieapp.domain.repo
 
+import UserModel
 import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesDto
 import com.example.firestoremovieapp.data.remote.dto.CategoryMoviesFilterDto
 import com.example.firestoremovieapp.data.remote.dto.PopulerMoviesDto
 import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.domain.model.LaterMovies
+import com.example.firestoremovieapp.domain.model.PopulerMoviesModel
 import com.example.firestoremovieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -25,5 +27,7 @@ interface MoviesRepo{
     suspend fun addWatcherLaterMovies(laterMovies:LaterMovies):Resource<LaterMovies>
     suspend fun getLaterMoviesFiresore():Flow<Resource<List<LaterMovies>>>
     suspend fun deleteLaterMovies(Id:LaterMovies):Resource<LaterMovies>
+    suspend fun getUser():Resource<List<UserModel>>
+
 
 }

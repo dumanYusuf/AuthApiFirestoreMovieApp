@@ -1,10 +1,12 @@
 package com.example.firestoremovieapp.presentation.home_view
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.domain.model.LaterMovies
+import com.example.firestoremovieapp.domain.model.PopulerMoviesModel
 import com.example.firestoremovieapp.domain.use_case.category_movies_use_case.CategoryMoviesUseCase
 import com.example.firestoremovieapp.domain.use_case.favori_add_firestore_use_case.FavoriAddFirestoreUseCase
 import com.example.firestoremovieapp.domain.use_case.later_watches_movies_use_case.LaterWatchesAddFirestoreUseCase
@@ -12,6 +14,7 @@ import com.example.firestoremovieapp.domain.use_case.populer_movies_use_case.Pop
 import com.example.firestoremovieapp.presentation.favorites_view.FavoriState
 import com.example.firestoremovieapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +28,8 @@ class HomePageViewModel @Inject constructor(
     private val categoryUseCase: CategoryMoviesUseCase,
     private val populerMoviesUseCase: PopulerMoviesUseCase,
     private val favoriAddFirestoreUseCase: FavoriAddFirestoreUseCase,
-    private val lateuseCase:LaterWatchesAddFirestoreUseCase
+    private val lateuseCase:LaterWatchesAddFirestoreUseCase,
+
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeState>(HomeState())
@@ -36,14 +40,18 @@ class HomePageViewModel @Inject constructor(
 
 
 
+
+
     private var categoryJob: Job? = null
     private var populerJob: Job? = null
+
 
 
     init {
        getCategoryMovies()
         getPopulerMovies()
     }
+
 
     fun addFavori(favoriModel: FavoriModel){
         viewModelScope.launch {
@@ -85,6 +93,7 @@ class HomePageViewModel @Inject constructor(
         Log.e("start", "viewModelPopulerStart")
         populerJob?.cancel()
         populerJob = populerMoviesUseCase.getPopulerMovies().onEach {
+            Log.e("listem","$populerJob")
             when (it) {
                 is Resource.Success -> {
                     _statePopuler.value = HomePopulerState(populerMoviesList = it.data ?: emptyList())
