@@ -139,5 +139,24 @@ class MoviesRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteLaterMovies(Id: LaterMovies): Resource<LaterMovies> {
+        return try {
+            val userId=auth.currentUser?.uid
+            if (userId!=null){
+                val favoriDocRef=firestore.collection("Users").document(userId)
+                    .collection("LaterWatches").document(Id.id.toString())
+                favoriDocRef.delete().await()
+
+                Resource.Success(Id)
+            }
+            else{
+                Resource.Error("User Not Founf")
+            }
+        }
+        catch (e:Exception){
+            Resource.Error("Error:${e.message}")
+        }
+    }
+
 
 }

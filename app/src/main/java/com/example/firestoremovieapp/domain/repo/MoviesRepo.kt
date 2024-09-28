@@ -24,6 +24,6 @@ interface MoviesRepo{
 
     suspend fun addWatcherLaterMovies(laterMovies:LaterMovies):Resource<LaterMovies>
     suspend fun getLaterMoviesFiresore():Flow<Resource<List<LaterMovies>>>
-
+    suspend fun deleteLaterMovies(Id:LaterMovies):Resource<LaterMovies>
 
 }

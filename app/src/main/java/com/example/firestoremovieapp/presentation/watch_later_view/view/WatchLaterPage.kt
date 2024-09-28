@@ -35,6 +35,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.firestoremovieapp.R
 import com.example.firestoremovieapp.Screen
 import com.example.firestoremovieapp.domain.model.FavoriModel
+import com.example.firestoremovieapp.domain.model.LaterMovies
 import com.example.firestoremovieapp.presentation.watch_later_view.WatchLaterViewModel
 import com.example.firestoremovieapp.util.Constans
 import com.google.gson.Gson
@@ -50,7 +51,7 @@ fun WatchLaterPage(
     val state=viewModel.stateLater.collectAsState()
 
     LaunchedEffect(true) {
-        viewModel.getFavori()
+        viewModel.getLaterMovies()
     }
 
     Column(
@@ -134,8 +135,8 @@ fun WatchLaterPage(
                                     modifier = Modifier
                                         .size(24.dp)
                                         .clickable {
-                                            val favoriModel = FavoriModel(
-                                                favoriId = laterItem.id.toString(),
+                                            val laterMovies = LaterMovies(
+                                                laterMoviesId = laterItem.id.toString(),
                                                 backdrop_path = laterItem.backdrop_path ?: "",
                                                 genre_ids = laterItem.genre_ids ?: listOf(),
                                                 id = laterItem.id,
@@ -148,10 +149,8 @@ fun WatchLaterPage(
                                                 title = laterItem.title,
                                                 vote_average = laterItem.vote_average
                                             )
-                                            // favoriModel'i kullanarak sil
-                                           // viewModel.deleteFavori(favoriModel) // Hatanın giderilmesi için favoriModel'i geçir
-                                            // Listeyi yenile
-                                            //viewModel.getFavori()
+                                            viewModel.deleteLaterMovies(laterMovies)
+
                                         }
                                 )
 
