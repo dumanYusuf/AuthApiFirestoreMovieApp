@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,9 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.firestoremovieapp.R
+import com.example.firestoremovieapp.Screen
 import com.example.firestoremovieapp.presentation.home_view.HomePageViewModel
 import com.example.firestoremovieapp.util.Constans
 import com.google.gson.Gson
@@ -44,19 +49,26 @@ import java.net.URLEncoder
 @Composable
 fun HomePage(
     modifier: Modifier = Modifier,
-    viewModel: HomePageViewModel = hiltViewModel()
+    viewModel: HomePageViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val state = viewModel.state.collectAsState().value
     val statePopuler = viewModel.statePopuler.collectAsState().value
 
-    Column(modifier.fillMaxSize()) {
-        Text(
-            modifier = Modifier.padding(10.dp),
-            fontSize = 24.sp,
-            text = "Movies"
-        )
 
-        // Kategori Filmler
+    Column(modifier.fillMaxSize()) {
+        Row (modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+            Text(
+                modifier = Modifier.padding(10.dp),
+                fontSize = 24.sp,
+                text = "Movies"
+            )
+            Icon(
+                modifier = Modifier.size(50.dp).padding(5.dp),
+                painter = painterResource(id = R.drawable.search) , contentDescription ="" )
+        }
+
+        // Category Movies
         if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else {
@@ -68,6 +80,10 @@ fun HomePage(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             onClick = {
                                 // go to categoryFilterPage
+                                val movieObject = Gson().toJson(categoryMovie)
+                                val encodedMovieObject =
+                                    URLEncoder.encode(movieObject, "UTF-8")
+                                navController.navigate(Screen.FilterMoviesPage.route+"/$encodedMovieObject")
                             }) {
                             Text(
                                 fontSize = 20.sp,
@@ -88,16 +104,19 @@ fun HomePage(
             }
         }
 
-
         // Popüler Movies
         if (statePopuler.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else {
             if (statePopuler.populerMoviesList.isNotEmpty()) {
-                Text(modifier = Modifier.padding(horizontal = 15.dp),
+                Text(
+                    modifier = Modifier.padding(horizontal = 15.dp),
                     fontSize = 20.sp,
-                    text = "Populer Movies")
-                LazyRow(
+                    text = "Watch Movies"
+                )
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -105,7 +124,7 @@ fun HomePage(
                     items(statePopuler.populerMoviesList) { populerMovie ->
                         Card(
                             modifier = Modifier
-                                .size(300.dp)
+                                .size(250.dp)
                                 .padding(5.dp)
                         ) {
                             Row(
@@ -118,13 +137,13 @@ fun HomePage(
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     Image(
                                         modifier = Modifier
-                                            .size(300.dp)
+                                            .size(250.dp)
                                             .clickable {
-                                                // Film detay sayfasına git
-                                                /* val movieObject = Gson().toJson(populerMovie)
+                                                // go to detail movies
+                                                 val movieObject = Gson().toJson(populerMovie)
                                                 val encodedMovieObject =
                                                     URLEncoder.encode(movieObject, "UTF-8")
-                                                navController.navigate("detailPage/$encodedMovieObject")*/
+                                               navController.navigate(Screen.DetailPage.route+"/$encodedMovieObject")
                                             },
                                         painter = rememberAsyncImagePainter(model = imageUrl),
                                         contentDescription = "Movie Backdrop",
@@ -141,17 +160,6 @@ fun HomePage(
                                             Row {
                                                 Icon(
                                                     tint = Color.Yellow,
-                                                    painter = painterResource(id = R.drawable.calendar),
-                                                    contentDescription = "Release Date"
-                                                )
-                                                Text(
-                                                    color = Color.Yellow,
-                                                    text = populerMovie.title
-                                                )
-                                            }
-                                            Row {
-                                                Icon(
-                                                    tint = Color.Yellow,
                                                     painter = painterResource(id = R.drawable.star),
                                                     contentDescription = "Vote Average"
                                                 )
@@ -160,17 +168,25 @@ fun HomePage(
                                                     text = populerMovie.vote_average.toString()
                                                 )
                                             }
-                                        }
-                                        Spacer(modifier = modifier.padding(top = 200.dp))
-                                        Column (
-                                            Modifier.fillMaxSize(),
-                                        ){
-                                            Text(
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.Yellow,
-                                                text = populerMovie.title
-                                            )
                                             Row {
+                                                Icon(
+                                                    tint = Color.Red,
+                                                    painter = painterResource(id = R.drawable.favori),
+                                                    contentDescription = ""
+                                                )
+                                            }
+                                        }
+                                        Spacer(modifier = Modifier.padding(top = 10.dp))
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(bottom = 10.dp, start = 10.dp),
+                                            verticalArrangement = Arrangement.Bottom,
+                                            horizontalAlignment = Alignment.Start
+                                        ) {
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
                                                 Icon(
                                                     tint = Color.Red,
                                                     painter = painterResource(id = R.drawable.flag),
@@ -181,20 +197,6 @@ fun HomePage(
                                                     color = Color.White,
                                                     text = "Dublaj & Altyazı"
                                                 )
-                                                Spacer(modifier = Modifier.padding(horizontal = 30.dp))
-                                                Row {
-                                                    Icon(
-                                                        tint = Color.Red,
-                                                        painter = painterResource(id = R.drawable.favori),
-                                                        contentDescription = ""
-                                                    )
-                                                    Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                                                    Icon(
-                                                        tint = Color.Red,
-                                                        painter = painterResource(id = R.drawable.later),
-                                                        contentDescription = ""
-                                                    )
-                                                }
                                             }
                                         }
                                     }
@@ -213,9 +215,6 @@ fun HomePage(
                 )
             }
         }
-
-
-
 
 
     }

@@ -9,6 +9,8 @@ sealed class Screen (val route:String){
     object PersonPage:Screen("person_page")
     object LoginPagePage:Screen("login_page")
     object RegisterPage:Screen("register_page")
+    object DetailPage:Screen("detail_page")
+    object FilterMoviesPage:Screen("filter_movies")
 
 
 

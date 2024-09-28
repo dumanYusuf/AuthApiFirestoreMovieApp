@@ -3,17 +3,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.firestoremovieapp.R
 import com.example.firestoremovieapp.Screen
+import com.example.firestoremovieapp.domain.model.CategoryFilterMoviesModel
+import com.example.firestoremovieapp.domain.model.CategoryMoviesModel
+import com.example.firestoremovieapp.domain.model.PopulerMoviesModel
 import com.example.firestoremovieapp.presentation.favorites_view.view.FavoriPage
+import com.example.firestoremovieapp.presentation.filter_movies_view.views.FilterMoviesPage
 import com.example.firestoremovieapp.presentation.home_view.view.HomePage
 import com.example.firestoremovieapp.presentation.login_view.view.LoginPage
 import com.example.firestoremovieapp.presentation.person_view.view.PersonPage
 import com.example.firestoremovieapp.presentation.watch_later_view.view.WatchLaterPage
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
+import java.net.URLDecoder
 
 @Composable
 fun PageController() {
@@ -78,10 +86,30 @@ fun PageController() {
                 LoginPage(navController = controller)
             }
             composable(Screen.HomePage.route) {
-                HomePage()
+                HomePage(navController = controller)
+            }
+            composable(Screen.DetailPage.route+"/{movie}",
+                arguments = listOf(
+                    navArgument("movie"){type= NavType.StringType}
+                )
+            ) {
+                val jsonMovie = it.arguments?.getString("movie")
+                val decodedJsonMovie = URLDecoder.decode(jsonMovie, "UTF-8")
+                val movie = Gson().fromJson(decodedJsonMovie, PopulerMoviesModel::class.java)
+               DetailPage(movie = movie)
             }
             composable(Screen.FavoriPage.route) {
                 FavoriPage()
+            }
+            composable(Screen.FilterMoviesPage.route+"/{filterId}",
+                arguments = listOf(
+                    navArgument("filterId"){type= NavType.StringType}
+                )
+            ){
+                val jsonMovie = it.arguments?.getString("filterId")
+                val decodedJsonMovie = URLDecoder.decode(jsonMovie, "UTF-8")
+                val movie = Gson().fromJson(decodedJsonMovie, CategoryMoviesModel::class.java)
+               FilterMoviesPage(filterMovie = movie, navController = controller)
             }
             composable(Screen.LaterPage.route) {
                 WatchLaterPage()

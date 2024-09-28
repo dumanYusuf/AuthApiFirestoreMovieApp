@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     private val categoryUseCase: CategoryMoviesUseCase,
-    private val populerMoviesUseCase: PopulerMoviesUseCase
+    private val populerMoviesUseCase: PopulerMoviesUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeState>(HomeState())
@@ -26,11 +26,14 @@ class HomePageViewModel @Inject constructor(
     private val _statePopuler = MutableStateFlow<HomePopulerState>(HomePopulerState())
     val statePopuler: StateFlow<HomePopulerState> = _statePopuler
 
+
     private var categoryJob: Job? = null
     private var populerJob: Job? = null
+    private var topRatedJob: Job? = null
+    private var upComingJob: Job? = null
 
     init {
-        getCategoryMovies()
+       getCategoryMovies()
         getPopulerMovies()
     }
 
