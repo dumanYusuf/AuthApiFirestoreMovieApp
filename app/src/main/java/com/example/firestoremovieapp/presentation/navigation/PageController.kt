@@ -99,7 +99,7 @@ fun PageController() {
                DetailPage(movie = movie)
             }
             composable(Screen.FavoriPage.route) {
-                FavoriPage()
+                FavoriPage(navController = controller)
             }
             composable(Screen.FilterMoviesPage.route+"/{filterId}",
                 arguments = listOf(

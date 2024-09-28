@@ -207,7 +207,7 @@ fun HomePage(
                                             ) {
                                                 Icon(
                                                     tint = Color.Red,
-                                                    painter = painterResource(id = R.drawable.flag),
+                                                    painter = painterResource(id = R.drawable.later),
                                                     contentDescription = ""
                                                 )
                                                 Spacer(modifier = Modifier.size(5.dp))

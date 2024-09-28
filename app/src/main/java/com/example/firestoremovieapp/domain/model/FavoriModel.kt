@@ -1,7 +1,7 @@
 package com.example.firestoremovieapp.domain.model
 
 data class FavoriModel(
-    val favoriId: String = "",
+    val favoriId: String="",
     val backdrop_path: String = "",
     val genre_ids: List<Int> = emptyList(),
     val id: Int = 0,

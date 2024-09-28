@@ -31,13 +31,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.firestoremovieapp.R
+import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.domain.model.PopulerMoviesModel
 import com.example.firestoremovieapp.util.Constans
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailPage(movie:PopulerMoviesModel){
+fun DetailPage(
+    movie:PopulerMoviesModel,
+){
     Scaffold(
         topBar = {
             TopAppBar(

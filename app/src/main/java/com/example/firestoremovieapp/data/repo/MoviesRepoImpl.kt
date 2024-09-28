@@ -78,5 +78,24 @@ class MoviesRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteFavori(favoriId: FavoriModel): Resource<FavoriModel> {
+        return try {
+            val userId=auth.currentUser?.uid
+            if (userId!=null){
+                val favoriDocRef=firestore.collection("Users").document(userId)
+                    .collection("Favori").document(favoriId.favoriId)
+                favoriDocRef.delete().await()
+
+                Resource.Success(favoriId)
+            }
+            else{
+                Resource.Error("User Not Founf")
+            }
+        }
+        catch (e:Exception){
+            Resource.Error("Error:${e.message}")
+        }
+    }
+
 
 }

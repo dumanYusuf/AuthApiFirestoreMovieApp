@@ -19,4 +19,7 @@ interface MoviesRepo{
     // firebase
     suspend fun addFavoriFirestore(favoriModel: FavoriModel):Resource<FavoriModel>
     suspend fun getFavoriFiresore():Flow<Resource<List<FavoriModel>>>
+    suspend fun deleteFavori(favoriId:FavoriModel):Resource<FavoriModel>
+
+
 }

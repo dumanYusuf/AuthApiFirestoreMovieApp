@@ -1,6 +1,7 @@
 package com.example.firestoremovieapp.presentation.favorites_view.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,15 +30,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.firestoremovieapp.R
+import com.example.firestoremovieapp.Screen
+import com.example.firestoremovieapp.domain.model.FavoriModel
 import com.example.firestoremovieapp.presentation.favorites_view.FavoriViewModel
 import com.example.firestoremovieapp.util.Constans
+import com.google.gson.Gson
+import java.net.URLEncoder
 
 @Composable
 fun FavoriPage(
     modifier: Modifier = Modifier,
-    viewModel: FavoriViewModel = hiltViewModel()
+    viewModel: FavoriViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val state = viewModel.stateFavori.collectAsState()
 
@@ -73,7 +80,13 @@ fun FavoriPage(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp),
+                            .height(200.dp).clickable {
+                                // go  to detilPage
+                                val movieObject = Gson().toJson(favoriItem)
+                                val encodedMovieObject =
+                                    URLEncoder.encode(movieObject, "UTF-8")
+                                navController.navigate(Screen.DetailPage.route+"/$encodedMovieObject")
+                            },
 
                         ) {
 
@@ -112,6 +125,32 @@ fun FavoriPage(
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(end = 8.dp)
                                 )
+                                Icon(
+                                    tint = Color.Red,
+                                    painter = painterResource(id = R.drawable.delete),
+                                    contentDescription = "Favorite",
+                                    modifier = Modifier.size(24.dp).clickable {
+                                        val favoriModel = FavoriModel(
+                                            favoriId = favoriItem.id.toString(),
+                                            backdrop_path = favoriItem.backdrop_path ?: "",
+                                            genre_ids = favoriItem.genre_ids ?: listOf(),
+                                            id = favoriItem.id,
+                                            original_language = favoriItem.original_language,
+                                            original_title = favoriItem.original_title,
+                                            overview = favoriItem.overview,
+                                            popularity = favoriItem.popularity,
+                                            poster_path = favoriItem.poster_path ?: "",
+                                            release_date = favoriItem.release_date,
+                                            title = favoriItem.title,
+                                            vote_average = favoriItem.vote_average
+                                        )
+                                        // favoriModel'i kullanarak sil
+                                        viewModel.deleteFavori(favoriModel) // Hatanın giderilmesi için favoriModel'i geçir
+                                        // Listeyi yenile
+                                        //viewModel.getFavori()
+                                    }
+                                )
+
 
                                 Row {
                                     Icon(
