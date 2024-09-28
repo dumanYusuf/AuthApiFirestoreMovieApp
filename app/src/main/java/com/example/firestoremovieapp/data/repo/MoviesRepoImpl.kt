@@ -119,6 +119,25 @@ class MoviesRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getLaterMoviesFiresore(): Flow<Resource<List<LaterMovies>>> = flow {
+
+        try {
+            val userId = auth.currentUser?.uid
+            if (userId != null) {
+                val laterDocumentRef = firestore.collection("Users").document(userId)
+                    .collection("LaterWatches").get().await()
+
+                val laterList = laterDocumentRef.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(LaterMovies::class.java)
+                }
+                emit(Resource.Success(laterList))
+            } else {
+                emit(Resource.Error("User not logged in"))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error("Error fetching favorites: ${e.message}"))
+        }
+    }
 
 
 }

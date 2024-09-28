@@ -112,7 +112,7 @@ fun PageController() {
                FilterMoviesPage(filterMovie = movie, navController = controller)
             }
             composable(Screen.LaterPage.route) {
-                WatchLaterPage()
+                WatchLaterPage(navController = controller)
             }
             composable(Screen.PersonPage.route) {
                 PersonPage(navController = controller)

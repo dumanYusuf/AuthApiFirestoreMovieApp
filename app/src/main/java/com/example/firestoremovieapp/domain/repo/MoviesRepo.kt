@@ -23,5 +23,7 @@ interface MoviesRepo{
     suspend fun deleteFavori(favoriId:FavoriModel):Resource<FavoriModel>
 
     suspend fun addWatcherLaterMovies(laterMovies:LaterMovies):Resource<LaterMovies>
+    suspend fun getLaterMoviesFiresore():Flow<Resource<List<LaterMovies>>>
+
 
 }
