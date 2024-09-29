@@ -27,3 +27,4 @@ Bu yapı, kodun okunabilirliğini, bakımını ve test edilebilirliğini artır�
 ![image alt](https://github.com/dumanYusuf/AuthApiFirestoreMovieApp/blob/master/firestoreMovieApp4.png?raw=true)
 ![image alt](https://github.com/dumanYusuf/AuthApiFirestoreMovieApp/blob/master/firestoreMovieApp5.png?raw=true)
 ![image alt](https://github.com/dumanYusuf/AuthApiFirestoreMovieApp/blob/master/firestoreMovieApp6.png?raw=true)
+![image alt](https://github.com/dumanYusuf/AuthApiFirestoreMovieApp/blob/master/firestoreMovieApp7.png?raw=true)
